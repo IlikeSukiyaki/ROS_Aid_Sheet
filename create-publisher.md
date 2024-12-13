@@ -189,3 +189,78 @@ This publisher sends velocity commands to control a turtle in the **turtlesim** 
 ### File Name
 - Save the code as `velocity_publisher.cpp`. 
 
+# Configuring `CMakeLists.txt` for a ROS Node
+
+This guide explains how to configure the `CMakeLists.txt` file for compiling and linking a ROS node.
+
+---
+
+## **Key Lines in `CMakeLists.txt`**
+
+### **1. Declare a C++ Executable**
+```cmake
+add_executable(velocity_publisher src/velocity_publisher.cpp)
+```
+- **`add_executable`**:
+  - Defines the executable to generate and specifies the source file(s) to compile.
+  - **`velocity_publisher`**: Name of the executable.
+  - **`src/velocity_publisher.cpp`**: The C++ source file to compile.
+
+### **2. Link Libraries**
+```cmake
+target_link_libraries(velocity_publisher ${catkin_LIBRARIES})
+```
+- **`target_link_libraries`**:
+  - Links the executable to the necessary libraries.
+  - **`velocity_publisher`**: Name of the executable to be linked.
+  - **`${catkin_LIBRARIES}`**: ROS libraries provided by catkin to enable ROS functionality.
+
+---
+
+## **How to Configure `CMakeLists.txt`**
+
+### **1. Set the Source Code and Executable File**
+- Use `add_executable()` to:
+  - Specify the name of the executable.
+  - Define the source file(s) that need to be compiled.
+
+### **2. Set the Libraries to Link**
+- Use `target_link_libraries()` to:
+  - Specify the executable to be linked.
+  - Define the libraries required for the executable to function properly within ROS.
+
+---
+
+## **Purpose of Each Command**
+
+### **1. `add_executable`**
+- Defines a build target (the executable to create).
+- Associates the target with specific source files.
+
+### **2. `target_link_libraries`**
+- Ensures the executable has access to necessary libraries, such as:
+  - ROS communication with the master.
+  - ROS message types like `geometry_msgs::Twist`.
+
+---
+
+## **Example Workflow**
+
+When building a ROS node:
+1. Use `add_executable()` to specify the source file(s) and the executable name.
+2. Use `target_link_libraries()` to link the executable with ROS libraries.
+
+For this example:
+- **Executable**: `velocity_publisher`.
+- **Source File**: `src/velocity_publisher.cpp`.
+- **Libraries**: `${catkin_LIBRARIES}` to enable ROS functionality.
+
+---
+
+## **Summary**
+
+The `CMakeLists.txt` file is configured to:
+1. Define the source files compiled into executables.
+2. Specify the libraries required for these executables to communicate with ROS and utilize its resources.
+
+This ensures that the node is built correctly and functions seamlessly within the ROS ecosystem.
