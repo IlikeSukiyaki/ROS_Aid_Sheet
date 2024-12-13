@@ -115,3 +115,128 @@ This workflow includes:
 4. Building the package to generate files for using the message in ROS nodes.
 
 By following these steps, you can create and integrate custom messages into your ROS workflow.
+
+
+# person_publisher.cpp
+
+This file demonstrates a ROS publisher node in C++ that publishes custom messages of type `learning_topic::Person` to the `/person_info` topic.
+
+---
+
+## **Code**
+
+```cpp
+#include <ros/ros.h>
+#include "learning_topic/Person.h"
+
+int main(int argc, char **argv)
+{
+    // ROS node initialization
+    ros::init(argc, argv, "person_publisher");
+
+    // Create a NodeHandle
+    ros::NodeHandle n;
+
+    // Create a Publisher to publish to /person_info topic with the message type learning_topic::Person
+    ros::Publisher person_info_pub = n.advertise<learning_topic::Person>("/person_info", 10);
+
+    // Set the loop frequency
+    ros::Rate loop_rate(1);
+
+    int count = 0;
+    while (ros::ok())
+    {
+        // Initialize a message of type learning_topic::Person
+        learning_topic::Person person_msg;
+        person_msg.name = "Tom";
+        person_msg.age = 18;
+        person_msg.sex = learning_topic::Person::male;
+
+        // Publish the message
+        person_info_pub.publish(person_msg);
+
+        ROS_INFO("Publish Person Info: name:%s age:%d sex:%d",
+                 person_msg.name.c_str(), person_msg.age, person_msg.sex);
+
+        // Sleep for the remainder of the loop cycle
+        loop_rate.sleep();
+    }
+
+    return 0;
+}
+```
+
+---
+
+## **Explanation**
+
+### **1. Includes**
+- **`#include <ros/ros.h>`**: ROS core library for C++.
+- **`#include "learning_topic/Person.h"`**: Header file for the custom message type `Person`.
+
+### **2. Node Initialization**
+```cpp
+ros::init(argc, argv, "person_publisher");
+```
+- Initializes the ROS node with the name `person_publisher`.
+
+### **3. Create a NodeHandle**
+```cpp
+ros::NodeHandle n;
+```
+- Facilitates communication with the ROS system.
+
+### **4. Create a Publisher**
+```cpp
+ros::Publisher person_info_pub = n.advertise<learning_topic::Person>("/person_info", 10);
+```
+- Publishes messages to the `/person_info` topic.
+- Message type: `learning_topic::Person`.
+- Queue size: 10.
+
+### **5. Message Initialization**
+```cpp
+learning_topic::Person person_msg;
+person_msg.name = "Tom";
+person_msg.age = 18;
+person_msg.sex = learning_topic::Person::male;
+```
+- Creates and populates a `Person` message.
+  - `name`: Name of the person.
+  - `age`: Age of the person.
+  - `sex`: Sex of the person, using constants defined in the `Person` message (`male`).
+
+### **6. Publish the Message**
+```cpp
+person_info_pub.publish(person_msg);
+```
+- Sends the message to the `/person_info` topic.
+
+### **7. Log the Published Data**
+```cpp
+ROS_INFO("Publish Person Info: name:%s age:%d sex:%d",
+         person_msg.name.c_str(), person_msg.age, person_msg.sex);
+```
+- Logs the message details to the console.
+
+### **8. Loop Frequency**
+```cpp
+ros::Rate loop_rate(1);
+```
+- Sets the loop rate to 1 Hz, ensuring the message is published once per second.
+
+### **9. Keep the Node Running**
+```cpp
+while (ros::ok()) {
+    ...
+}
+```
+- Continuously publishes messages as long as the ROS system is running.
+
+---
+
+## **Summary**
+- This publisher node sends `Person` messages to the `/person_info` topic at 1 Hz.
+- Each message contains details about a person (`name`, `age`, and `sex`).
+- The node logs the published message information for debugging and monitoring purposes.
+
