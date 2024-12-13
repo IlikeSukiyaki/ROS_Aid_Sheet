@@ -15,7 +15,7 @@ catkin_init_workspace
 ```
 
 ### Explanation
-- `mkdir -p ~/catkin_ws/src`: Creates the workspace directory structure (`catkin_ws` and its `src` subdirectory).
+- `mkdir -p ~/catkin_ws/src`: Creates the workspace directory structure (`catkin_ws` and its `src` subdirectory, `catkin_ws` can be named based on your applications (for example, you could totally do `abababa_ws` over here)).
 - `cd ~/catkin_ws/src`: Navigates to the `src` directory where ROS packages will be stored.
 - `catkin_init_workspace`: Initializes the `src` directory as a catkin workspace.
 
