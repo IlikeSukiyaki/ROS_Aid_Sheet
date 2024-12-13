@@ -264,3 +264,68 @@ The `CMakeLists.txt` file is configured to:
 2. Specify the libraries required for these executables to communicate with ROS and utilize its resources.
 
 This ensures that the node is built correctly and functions seamlessly within the ROS ecosystem.
+
+
+# Running the `velocity_publisher` with TurtleSim
+
+This guide outlines how to compile, run, and test a ROS publisher node with the TurtleSim simulation.
+
+---
+
+## **Steps**
+
+### **1. Navigate to the Catkin Workspace**
+```bash
+cd ~/catkin_ws
+```
+- Change to the root directory of your catkin workspace.
+
+### **2. Build the Workspace**
+```bash
+catkin_make
+```
+- Compile source code and generate executables.
+
+### **3. Source the Workspace**
+```bash
+source devel/setup.bash
+```
+- Set environment variables so ROS can recognize your workspace and nodes.
+
+### **4. Start the ROS Master**
+```bash
+roscore
+```
+- Launch the ROS master to manage node communication.
+
+### **5. Launch TurtleSim**
+```bash
+rosrun turtlesim turtlesim_node
+```
+- Start the TurtleSim simulation.
+
+### **6. Run the Publisher Node**
+```bash
+rosrun learning_topic velocity_publisher
+```
+- Execute the `velocity_publisher` node to send velocity commands.
+
+---
+
+## **What Happens?**
+
+1. The `velocity_publisher` node publishes velocity commands (`linear.x = 0.5 m/s`, `angular.z = 0.2 rad/s`) to `/turtle1/cmd_vel`.
+2. The TurtleSim window displays the turtle moving in a circular trajectory.
+3. The terminal logs the published velocity commands:
+   ```plaintext
+   [INFO] Publish turtle velocity command [0.50 m/s, 0.20 rad/s]
+   ```
+
+---
+
+## **Summary**
+This workflow demonstrates:
+- Compiling a ROS node with `catkin_make`.
+- Setting up the environment with `source`.
+- Running a custom publisher node to control the TurtleSim simulation via ROS topics.
+
