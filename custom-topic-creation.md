@@ -336,3 +336,73 @@ ros::spin();
 - When a message is received, the `personInfoCallback` function processes and logs the `name`, `age`, and `sex` fields.
 - It runs continuously, waiting for incoming messages until the program is terminated.
 
+# CMakeLists.txt for person_publisher and person_subscriber Nodes
+
+This snippet from the `CMakeLists.txt` file shows how to configure the build process for the `person_publisher` and `person_subscriber` nodes, which utilize custom messages in ROS.
+
+---
+
+## **Code**
+
+```cmake
+add_executable(person_publisher src/person_publisher.cpp)
+target_link_libraries(person_publisher ${catkin_LIBRARIES})
+add_dependencies(person_publisher ${PROJECT_NAME}_generate_messages_cpp)
+
+add_executable(person_subscriber src/person_subscriber.cpp)
+target_link_libraries(person_subscriber ${catkin_LIBRARIES})
+add_dependencies(person_subscriber ${PROJECT_NAME}_generate_messages_cpp)
+```
+
+---
+
+## **Explanation**
+
+### **1. Add Executable**
+```cmake
+add_executable(person_publisher src/person_publisher.cpp)
+add_executable(person_subscriber src/person_subscriber.cpp)
+```
+- **`add_executable`**:
+  - Registers the source files (`person_publisher.cpp` and `person_subscriber.cpp`) as executables for the ROS package.
+
+### **2. Link Libraries**
+```cmake
+target_link_libraries(person_publisher ${catkin_LIBRARIES})
+target_link_libraries(person_subscriber ${catkin_LIBRARIES})
+```
+- **`target_link_libraries`**:
+  - Links the executables to ROS libraries provided by `catkin` (e.g., `roscpp`, `message_runtime`).
+  - Ensures the executables can use ROS functionalities like publishers, subscribers, and logging.
+
+### **3. Add Dependencies**
+```cmake
+add_dependencies(person_publisher ${PROJECT_NAME}_generate_messages_cpp)
+add_dependencies(person_subscriber ${PROJECT_NAME}_generate_messages_cpp)
+```
+- **`add_dependencies`**:
+  - Ensures that the custom message files (`Person.msg`) are generated before building the nodes.
+  - `${PROJECT_NAME}_generate_messages_cpp` is automatically defined by ROS when custom messages are added.
+
+---
+
+## **Purpose of Each Line**
+
+1. **`add_executable`**:
+   - Defines the source files to build the publisher and subscriber nodes.
+
+2. **`target_link_libraries`**:
+   - Links the ROS libraries required for the executables to function.
+
+3. **`add_dependencies`**:
+   - Ensures that the custom messages are compiled and available when the executables are built.
+
+---
+
+## **Summary**
+This configuration:
+1. Adds the `person_publisher` and `person_subscriber` executables.
+2. Links them to the necessary ROS libraries.
+3. Ensures that custom message dependencies are met during the build process.
+
+This ensures that the nodes are correctly built and ready to use in the ROS environment.
