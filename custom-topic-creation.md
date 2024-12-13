@@ -240,3 +240,99 @@ while (ros::ok()) {
 - Each message contains details about a person (`name`, `age`, and `sex`).
 - The node logs the published message information for debugging and monitoring purposes.
 
+
+# person_subscriber.cpp
+
+This file demonstrates a ROS subscriber node in C++ that subscribes to the `/person_info` topic and processes messages of type `learning_topic::Person`.
+
+---
+
+## **Code**
+
+```cpp
+/**
+ * Example ROS subscriber node for /person_info topic, subscribing to messages of type learning_topic::Person
+ */
+
+#include <ros/ros.h>
+#include "learning_topic/Person.h"
+
+// Callback function to process received messages
+void personInfoCallback(const learning_topic::Person::ConstPtr& msg)
+{
+    // Print the received message information
+    ROS_INFO("Subscribe Person Info: name:%s age:%d sex:%d",
+             msg->name.c_str(), msg->age, msg->sex);
+}
+
+int main(int argc, char **argv)
+{
+    // Initialize the ROS node
+    ros::init(argc, argv, "person_subscriber");
+
+    // Create a NodeHandle
+    ros::NodeHandle n;
+
+    // Create a subscriber to the /person_info topic
+    ros::Subscriber person_info_sub = n.subscribe("/person_info", 10, personInfoCallback);
+
+    // Keep the program running and process incoming messages
+    ros::spin();
+
+    return 0;
+}
+```
+
+---
+
+## **Explanation**
+
+### **1. Includes**
+- **`#include <ros/ros.h>`**: ROS core library for C++.
+- **`#include "learning_topic/Person.h"`**: Header file for the custom message type `Person`.
+
+### **2. Callback Function**
+```cpp
+void personInfoCallback(const learning_topic::Person::ConstPtr& msg)
+{
+    ROS_INFO("Subscribe Person Info: name:%s age:%d sex:%d",
+             msg->name.c_str(), msg->age, msg->sex);
+}
+```
+- Processes messages received on the `/person_info` topic.
+- Extracts and logs the `name`, `age`, and `sex` fields from the `Person` message.
+
+### **3. Node Initialization**
+```cpp
+ros::init(argc, argv, "person_subscriber");
+```
+- Initializes the ROS node with the name `person_subscriber`.
+
+### **4. Create a NodeHandle**
+```cpp
+ros::NodeHandle n;
+```
+- Facilitates communication with the ROS system.
+
+### **5. Create a Subscriber**
+```cpp
+ros::Subscriber person_info_sub = n.subscribe("/person_info", 10, personInfoCallback);
+```
+- Subscribes to the `/person_info` topic.
+- Message type: `learning_topic::Person`.
+- Queue size: 10.
+- Associates incoming messages with the `personInfoCallback` function.
+
+### **6. Process Incoming Messages**
+```cpp
+ros::spin();
+```
+- Keeps the program running and processes messages as they arrive.
+
+---
+
+## **Summary**
+- This subscriber node listens to the `/person_info` topic.
+- When a message is received, the `personInfoCallback` function processes and logs the `name`, `age`, and `sex` fields.
+- It runs continuously, waiting for incoming messages until the program is terminated.
+
