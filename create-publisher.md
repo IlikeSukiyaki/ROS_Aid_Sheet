@@ -329,3 +329,104 @@ This workflow demonstrates:
 - Setting up the environment with `source`.
 - Running a custom publisher node to control the TurtleSim simulation via ROS topics.
 
+
+# ROS Publisher in Python
+
+This guide explains how to implement a ROS publisher node in Python to control the TurtleSim simulation.
+
+---
+
+## **Python Code**
+
+```python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import rospy
+from geometry_msgs.msg import Twist
+
+def velocity_publisher():
+    # Initialize the ROS node
+    rospy.init_node('velocity_publisher', anonymous=True)
+
+    # Create a publisher for the /turtle1/cmd_vel topic
+    turtle_vel_pub = rospy.Publisher('/turtle1/cmd_vel', Twist, queue_size=10)
+
+    # Set the publishing rate to 10 Hz
+    rate = rospy.Rate(10)
+
+    while not rospy.is_shutdown():
+        # Create and populate a Twist message
+        vel_msg = Twist()
+        vel_msg.linear.x = 0.5  # Linear velocity (m/s)
+        vel_msg.angular.z = 0.2  # Angular velocity (rad/s)
+
+        # Publish the message
+        turtle_vel_pub.publish(vel_msg)
+        rospy.loginfo("Publish turtle velocity command[%0.2f m/s, %0.2f rad/s]", vel_msg.linear.x, vel_msg.angular.z)
+
+        # Sleep to maintain the loop rate
+        rate.sleep()
+
+if __name__ == '__main__':
+    try:
+        velocity_publisher()
+    except rospy.ROSInterruptException:
+        pass
+```
+
+---
+
+## **Explanation**
+
+### **1. Import Required Libraries**
+- `rospy`: ROS client library for Python.
+- `geometry_msgs.msg.Twist`: Message type for velocity commands.
+
+### **2. Initialize ROS Node**
+```python
+rospy.init_node('velocity_publisher', anonymous=True)
+```
+- Initializes the node with the name `velocity_publisher`.
+
+### **3. Create Publisher**
+```python
+turtle_vel_pub = rospy.Publisher('/turtle1/cmd_vel', Twist, queue_size=10)
+```
+- Publishes messages of type `Twist` to the topic `/turtle1/cmd_vel`.
+- `queue_size=10`: Limits the number of messages queued for processing.
+
+### **4. Define Publishing Loop**
+- **Set Rate**: Ensures messages are published at 10 Hz:
+  ```python
+  rate = rospy.Rate(10)
+  ```
+- **Populate and Publish Messages**:
+  ```python
+  vel_msg = Twist()
+  vel_msg.linear.x = 0.5  # Forward velocity
+  vel_msg.angular.z = 0.2  # Rotational velocity
+  turtle_vel_pub.publish(vel_msg)
+  ```
+  - Sends velocity commands to the TurtleSim node.
+
+### **5. Graceful Shutdown**
+```python
+except rospy.ROSInterruptException:
+    pass
+```
+- Handles interruptions gracefully (e.g., pressing Ctrl+C).
+
+---
+
+## **What Happens?**
+- The node publishes velocity commands (`linear.x = 0.5 m/s`, `angular.z = 0.2 rad/s`) to `/turtle1/cmd_vel`.
+- The TurtleSim moves in a circular trajectory.
+- Published messages are logged to the terminal.
+
+---
+
+## **Summary**
+- This Python script demonstrates a basic ROS publisher node.
+- It integrates with TurtleSim to control the turtle's motion using velocity commands.
+
